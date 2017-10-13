@@ -1,9 +1,12 @@
-# html-dom-parse
-HTML DOM Parse
+# Simple HTML DOM Parser
 
 This is a PHP function that can extract any HTML tag and its attributes from a given string.
 
 Note that this is the initial release and the code needs optimization.
+
+@TODO: Test cases
+@TODO: Regex improvements
+@TODO: Documentation
 
 ## Usage
 
