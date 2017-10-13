@@ -24,22 +24,21 @@
  *
  * @return array An array of extracted tags, or an empty array if no matching tags were found. 
  */
-function extract_tags( $html, $tag, $selfclosing = null, $return_the_entire_tag = false, $charset = 'ISO-8859-1' ){
-     
-    if ( is_array($tag) ){
+function extract_tags($html, $tag, $selfclosing = null, $return_the_entire_tag = false, $charset = 'utf-8') {
+    if (is_array($tag)) {
         $tag = implode('|', $tag);
     }
-     
+
     //If the user didn't specify if $tag is a self-closing tag we try to auto-detect it
     //by checking against a list of known self-closing tags.
-    $selfclosing_tags = array( 'area', 'base', 'basefont', 'br', 'hr', 'input', 'img', 'link', 'meta', 'col', 'param' );
-    if ( is_null($selfclosing) ){
-        $selfclosing = in_array( $tag, $selfclosing_tags );
+    $selfclosing_tags = array('area', 'base', 'basefont', 'br', 'hr', 'input', 'img', 'link', 'meta', 'col', 'param');
+    if (is_null($selfclosing)) {
+        $selfclosing = in_array($tag, $selfclosing_tags);
     }
-     
+
     //The regexp is different for normal and self-closing tags because I can't figure out 
     //how to make a sufficiently robust unified one.
-    if ( $selfclosing ){
+    if ($selfclosing) {
         $tag_pattern = 
             '@<(?P<tag>'.$tag.')           # <tag
             (?P<attributes>\s[^>]+)?       # attributes, if any
@@ -67,7 +66,7 @@ function extract_tags( $html, $tag, $selfclosing = null, $return_the_entire_tag 
         @xsi';
  
     //Find all tags 
-    if ( !preg_match_all($tag_pattern, $html, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE ) ){
+    if (!preg_match_all($tag_pattern, $html, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE)) {
         //Return an empty array if we didn't find anything
         return array();
     }
