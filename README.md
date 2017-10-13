@@ -70,3 +70,7 @@ foreach ($nodes as $node) {
     echo strip_tags($node['contents']) . '<br>';
 }
 ```
+
+## Notes
+
+Comments are not ignored and their contents may mess up the output. ALso, nested tags may return unexpected output.
