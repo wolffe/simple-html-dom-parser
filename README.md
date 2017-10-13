@@ -8,7 +8,6 @@ Note that this is the initial release and the code needs optimization.
 ## Usage
 
 ```php
-<?php
 require_once 'simpleHtmlDomParser.php';
 
 function getElementContent($tag, $type, $identifier, $content) {
