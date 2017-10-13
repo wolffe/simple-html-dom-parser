@@ -79,3 +79,28 @@ foreach ($nodes as $node) {
 ## Notes
 
 Comments are not ignored and their contents may mess up the output. ALso, nested tags may return unexpected output.
+
+## Regex
+
+```
+@<(?P<tag>'.$tag.')           # <tag
+(?P<attributes>\s[^>]+)?      # attributes, if any
+\s*/?>                        # /> or just >, being lenient here 
+@xsi
+
+@<(?P<tag>'.$tag.')           # <tag
+(?P<attributes>\s[^>]+)?      # attributes, if any
+\s*>                          # >
+(?P<contents>.*?)             # tag contents
+</(?P=tag)>                   # the closing </tag>
+@xsi
+
+@
+(?P<name>\w+)                                         # attribute name
+\s*=\s*
+(
+    (?P<quote>[\"\'])(?P<value_quoted>.*?)(?P=quote)  # a quoted value
+    |                                                 # or
+    (?P<value_unquoted>[^\s"\']+?)(?:\s+|$)           # an unquoted value (terminated by whitespace or EOF) 
+)
+@xsi
