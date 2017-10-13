@@ -1,5 +1,7 @@
 # Simple HTML DOM Parser
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/87df9463010447ff94ab238885fcf8df)](https://www.codacy.com/app/wolffe/simple-html-dom-parser?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=wolffe/simple-html-dom-parser&amp;utm_campaign=Badge_Grade)
+
 This is a PHP function that can extract any HTML tag and its attributes from a given string.
 
 Note that this is the initial release and the code needs optimization.
