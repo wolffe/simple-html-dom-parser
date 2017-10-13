@@ -31,48 +31,29 @@ function extract_tags($html, $tag, $selfClosing = null, $entireTag = false) {
     }
 
     // If the user did not specify the self-closing tag, autodetect it
-    $selfClosingTags = array('area', 'base', 'basefont', 'br', 'hr', 'input', 'img', 'link', 'meta', 'col', 'param');
+    $selfClosingTags = ['area', 'base', 'basefont', 'br', 'hr', 'input', 'img', 'link', 'meta', 'col', 'param'];
     if (is_null($selfClosing)) {
         $selfClosing = in_array($tag, $selfClosingTags);
     }
 
     if ($selfClosing) {
-        $tagPattern = 
-            '@<(?P<tag>'.$tag.')           # <tag
-            (?P<attributes>\s[^>]+)?       # attributes, if any
-            \s*/?>                         # /> or just >, being lenient here 
-            @xsi';
+        $tagPattern = '@<(?P<tag>'.$tag.')(?P<attributes>\s[^>]+)?\s*/?>@xsi';
     } else {
-        $tagPattern = 
-            '@<(?P<tag>'.$tag.')           # <tag
-            (?P<attributes>\s[^>]+)?       # attributes, if any
-            \s*>                           # >
-            (?P<contents>.*?)              # tag contents
-            </(?P=tag)>                    # the closing </tag>
-            @xsi';
+        $tagPattern = '@<(?P<tag>'.$tag.')(?P<attributes>\s[^>]+)?\s*>(?P<contents>.*?)</(?P=tag)>@xsi';
     }
 
-    $attributePattern = 
-        '@
-        (?P<name>\w+)                         # attribute name
-        \s*=\s*
-        (
-            (?P<quote>[\"\'])(?P<value_quoted>.*?)(?P=quote)    # a quoted value
-            |                           # or
-            (?P<value_unquoted>[^\s"\']+?)(?:\s+|$)           # an unquoted value (terminated by whitespace or EOF) 
-        )
-        @xsi';
+    $attributePattern = '@(?P<name>\w+)\s*=\s*((?P<quote>[\"\'])(?P<value_quoted>.*?)(?P=quote)|(?P<value_unquoted>[^\s"\']+?)(?:\s+|$))@xsi';
 
     // Find all tags
     if (!preg_match_all($tagPattern, $html, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE)) {
         // Return an empty array if nothing found
-        return array();
+        return [];
     }
 
-    $tags = array();
+    $tags = [];
     foreach ($matches as $match) {
         // Parse tag attributes, if any
-        $attributes = array();
+        $attributes = [];
         if (!empty($match['attributes'][0])) {
             if (preg_match_all($attributePattern, $match['attributes'][0], $attributeData, PREG_SET_ORDER)) {
                 // Turn the attribute data into a name->value array
@@ -95,12 +76,12 @@ function extract_tags($html, $tag, $selfClosing = null, $entireTag = false) {
             }
         }
 
-        $tag = array(
+        $tag = [
             'tag_name' => $match['tag'][0],
             'offset' => $match[0][1],
             'contents' => !empty($match['contents']) ? $match['contents'][0] : '', //empty for self-closing tags
             'attributes' => $attributes,
-        );
+        ];
 
         if ($entireTag) {
             $tag['full_tag'] = $match[0][0];
